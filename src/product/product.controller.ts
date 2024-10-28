@@ -45,9 +45,8 @@ export class ProductController {
   @ApiQuery({ name: 'memory', required: false, type: String })
   @ApiQuery({ name: 'screenType', required: false, type: String })
   @ApiQuery({ name: 'page', required: false, type: String })
-  findProductByQuery(@Query() data: FindProductBySearchParams) {
-    console.log(data);
-
+  findProductByQuery(
+    @Query() data: FindProductBySearchParams,) {
     return this.productService.findProductByQuery(data)
   }
   @Get(':id')

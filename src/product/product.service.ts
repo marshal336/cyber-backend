@@ -136,15 +136,17 @@ export class ProductService {
     return product
   }
 
-  async findProductByQuery(data: FindProductBySearchParams) {
+  async findProductByQuery(data: FindProductBySearchParams,) {
     const brandId = data.brandId?.split(',').map(Number)
     const memoryId = data.memory?.split(',').map(Number)
     const screenTypeId = data.screenType?.split(',').map(Number)
 
     const product = await this.prisma.product.findMany({
+      skip: (+data.page - 1) * 8,
+      take: 8,
       where: {
         productItemInfo: {
-          some: {
+          every: {
             brandId: {
               in: brandId
             },
@@ -159,12 +161,11 @@ export class ProductService {
           }
         },
       },
-      skip: +data.page,
-      take: 8,
       include: {
         productItemInfo: true,
         category: true
-      }
+      },
+
     })
 
     if (!product) throw new BadRequestException('No product by this params')

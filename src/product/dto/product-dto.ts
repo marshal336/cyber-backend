@@ -34,9 +34,7 @@ export class FindProductBySearchParams {
     @IsOptional()
     memory?: string
 
-
     @IsString()
-    @IsOptional()
-    page?: string
+    page: string
 
 }
