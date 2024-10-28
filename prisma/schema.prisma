@@ -1,0 +1,152 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(cuid())
+  fullName  String?   @map("full_name")
+  email     String    @unique
+  password  String
+  cart      Cart?
+  role      Role      @default(USER)
+  createdAt DateTime? @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  @@map("user")
+}
+
+model Product {
+  id              Int               @id @default(autoincrement())
+  title           String
+  bestSeller      Int?              @default(0) @map("best_seller")
+  discount        Int?              @default(0)
+  category        Category          @relation(fields: [categoryId], references: [id])
+  categoryId      Int
+  productItemInfo ProductItemInfo[] @relation(map: "product_item_info")
+  cartItem        CartItem[]        @relation(map: "cart_item")
+  defaultImage    String            @map("default_image")
+  createdAt       DateTime?         @default(now()) @map("created_at")
+  updatedAt       DateTime?         @updatedAt @map("updated_at")
+
+  @@map("product")
+}
+
+model ProductItemInfo {
+  id               Int                 @id @default(autoincrement())
+  screenSize       String?             @map("screen_size")
+  CPU              String?             @map("cpu")
+  brand            Brand               @relation(fields: [brandId], references: [id])
+  screenType       ScreenType          @relation(fields: [screenTypeId], references: [id], map: "screen_type")
+  screenTypeId     Int
+  product          Product             @relation(fields: [productId], references: [id])
+  colors           ProductItemColors[]
+  memory           ProductItemMemory[]
+  imagesUrl        ProductItemImages[]
+  brandId          Int                 @map("brand_id")
+  productId        Int                 @map("product_id")
+  price            Int
+  mainCamera       String?             @map("main_camera")
+  frontCamera      String?             @map("front_camera")
+  battery          Int?
+  description      String?
+  screenResolution String?             @map("screen_resolution")
+  cores            Int?
+  createdAt        DateTime?           @default(now()) @map("created_at")
+  updatedAt        DateTime?           @updatedAt @map("updated_at")
+
+  @@map("product_item_info")
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  title     String
+  product   Product[]
+  createdAt DateTime? @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  @@map("category")
+}
+
+model ProductItemMemory {
+  id              Int               @id @default(autoincrement())
+  title           String
+  price           Int
+  productItemInfo ProductItemInfo[] @relation(map: "product_item_info")
+  createdAt       DateTime?         @default(now()) @map("created_at")
+  updatedAt       DateTime?         @updatedAt @map("updated_at")
+
+  @@map("product_item_memory")
+}
+
+model ProductItemColors {
+  id              Int               @id @default(autoincrement())
+  color           String
+  productItemInfo ProductItemInfo[] @relation(map: "product_item_info")
+  createdAt       DateTime?         @default(now()) @map("created_at")
+  updatedAt       DateTime?         @updatedAt @map("updated_at")
+
+  @@map("product_item_colors")
+}
+
+model Brand {
+  id              Int               @id @default(autoincrement())
+  productItemInfo ProductItemInfo[] @relation(map: "product_item_info")
+  title           String
+  createdAt       DateTime?         @default(now()) @map("created_at")
+  updatedAt       DateTime?         @updatedAt @map("updated_at")
+
+  @@map("brand")
+}
+
+model ProductItemImages {
+  id        Int               @id @default(autoincrement())
+  product   ProductItemInfo[]
+  imgUrl    String[]          @map("img_url")
+  createdAt DateTime?         @default(now()) @map("created_at")
+  updatedAt DateTime?         @updatedAt @map("updated_at")
+
+  @@map("product_item_images")
+}
+
+model CartItem {
+  id            String    @id @default(cuid())
+  productItem   Product   @relation(fields: [productItemId], references: [id], map: "product_item")
+  productItemId Int       @map("product_item_images")
+  cart          Cart      @relation(fields: [cartId], references: [id])
+  cartId        String
+  createdAt     DateTime? @default(now()) @map("created_at")
+  updatedAt     DateTime? @updatedAt @map("updated_at")
+
+  @@map("cart_item")
+}
+
+model Cart {
+  id        String     @id @default(cuid())
+  total     Int        @default(0)
+  user      User       @relation(fields: [userId], references: [id])
+  userId    String     @unique
+  cartItems CartItem[] @relation(map: "cart_items")
+  createdAt DateTime?  @default(now()) @map("created_at")
+  updatedAt DateTime?  @updatedAt @map("updated_at")
+
+  @@map("cart")
+}
+
+model ScreenType {
+  id              Int               @id @default(autoincrement())
+  title           String
+  productItemInfo ProductItemInfo[]
+  createdAt       DateTime?         @default(now()) @map("created_at")
+  updatedAt       DateTime?         @updatedAt @map("updated_at")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
