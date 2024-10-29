@@ -141,6 +141,8 @@ export class ProductService {
     const memoryId = data.memory?.split(',').map(Number)
     const screenTypeId = data.screenType?.split(',').map(Number)
 
+    if (+data.page <= 0 || !+data.page) throw new BadRequestException('invalid')
+
     const product = await this.prisma.product.findMany({
       skip: (+data.page - 1) * 8,
       take: 8,
@@ -165,7 +167,9 @@ export class ProductService {
         productItemInfo: true,
         category: true
       },
-
+    })
+    const count = await this.prisma.product.count({
+      where: { id: { in: product.map(({ id }) => id) } }
     })
 
     if (!product) throw new BadRequestException('No product by this params')
