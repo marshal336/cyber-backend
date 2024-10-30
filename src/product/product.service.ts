@@ -15,7 +15,12 @@ export class ProductService {
         createdAt: 'asc'
       },
       include: {
-        productItemInfo: true,
+        productItemInfo: {
+          include: {
+            colors: true,
+            memory: true,
+          }
+        },
         category: true,
         memory: true,
         colors: true,
@@ -31,7 +36,12 @@ export class ProductService {
         bestSeller: 'desc'
       },
       include: {
-        productItemInfo: true,
+        productItemInfo: {
+          include: {
+            colors: true,
+            memory: true,
+          }
+        },
         category: true,
         memory: true,
         colors: true,
@@ -45,9 +55,10 @@ export class ProductService {
     const products = await this.prisma.product.findMany({
       include: {
         productItemInfo: {
-          orderBy: {
-            price: 'asc'
-          },
+          include: {
+            colors: true,
+            memory: true,
+          }
         },
         category: true,
         memory: true,
@@ -67,7 +78,12 @@ export class ProductService {
         }
       },
       include: {
-        productItemInfo: true,
+        productItemInfo: {
+          include: {
+            colors: true,
+            memory: true,
+          }
+        },
         category: true,
         colors: true,
         memory: true
@@ -183,7 +199,9 @@ export class ProductService {
             memory: true
           }
         },
-        category: true
+        category: true,
+        colors: true,
+        memory: true
       },
     })
     const count = await this.prisma.product.count({
