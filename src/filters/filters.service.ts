@@ -8,19 +8,24 @@ export class FiltersService {
   ) { }
 
   async getFilters() {
-    const brands = await this.prisma.brand.findMany()
-    const screenType = await this.prisma.screenType.findMany()
-    const memorys = await this.prisma.productItemMemory.findMany({
-      select: {
-        id: true,
-        title: true,
-        createdAt: true,
-        updatedAt: true
+    const filters = await this.prisma.$transaction(async () => {
+      const brands = await this.prisma.brand.findMany()
+      const screenType = await this.prisma.screenType.findMany()
+      const memorys = await this.prisma.productItemMemory.findMany({
+        select: {
+          id: true,
+          title: true,
+          createdAt: true,
+          updatedAt: true
+        }
+      })
+      return {
+        brands,
+        screenType,
+        memorys,
       }
     })
-    if (!memorys) throw new BadRequestException('no memorys')
-    if (!screenType) throw new BadRequestException('no screen types')
-    if (!brands) throw new BadRequestException('no brands')
-    return { brands, screenType, memorys }
+    if (!filters) throw new BadRequestException('no filters')
+    return filters
   }
 }

@@ -1,27 +1,44 @@
-import { IsArray, IsDateString, IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
+import { Category, ProductItemColors, ProductItemMemory } from '@prisma/client';
 
-export class DefaultProduct {
+
+export class Product {
     @IsNumber()
     id: number;
 
     @IsString()
     title: string;
 
+    @IsNumber()
+    bestSeller: number;
+
+    @IsNumber()
+    categoryId: number;
+
+    @IsNumber()
+    colorId: number;
+
+    @IsNumber()
+    discount: number;
+
     @IsString()
     defaultImage: string;
 
-    @IsDateString()
+    @IsString()
     createdAt: string;
 
-    @IsDateString()
+    @IsString()
     updatedAt: string;
 
+    @IsArray()
+    colors: ProductItemColors[];
+
+    @IsArray()
+    memory: ProductItemMemory[];
+
+    category: Category;
 }
 
-export class FindProductByColor {
-    @IsNumber()
-    colorId: number
-}
 export class FindProductBySearchParams {
     @IsString()
     @IsOptional()
@@ -37,4 +54,13 @@ export class FindProductBySearchParams {
     @IsString()
     page: string
 
+}
+
+export class FindProductByArgs {
+    @IsString()
+    title: string
+    @IsString()
+    memory: string
+    @IsString()
+    color: string
 }

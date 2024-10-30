@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Query, Res, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { DefaultProduct, FindProductByColor, FindProductBySearchParams } from './dto/product-dto';
+import { FindProductByArgs, FindProductBySearchParams } from './dto/product-dto';
 
 @ApiTags('Products')
 @UsePipes(new ValidationPipe())
@@ -49,12 +49,14 @@ export class ProductController {
     @Query() data: FindProductBySearchParams,) {
     return this.productService.findProductByQuery(data)
   }
-  @Get(':id')
-  @ApiOperation({ summary: 'Get product by id' })
+
+
+  @Post('')
+  @ApiOperation({ summary: 'Get product by args' })
   @HttpCode(HttpStatus.OK)
-  @ApiParam({ type: String, name: 'id' })
-  findById(@Param('id') id: string) {
-    return this.productService.findProductById(+id)
+  @ApiBody({ type: FindProductByArgs, })
+  findById(@Body() body: FindProductByArgs) {
+    return this.productService.findProductByArgs(body)
   }
 
   @Get('/category/:category')
@@ -63,15 +65,6 @@ export class ProductController {
   @ApiParam({ type: String, name: 'category' })
   getByCategory(@Param('category') category: string) {
     return this.productService.getByCategory(category)
-  }
-
-
-  @Post()
-  @ApiOperation({ summary: 'Get product by color ' })
-  @HttpCode(HttpStatus.OK)
-  @ApiBody({ type: FindProductByColor, })
-  findProductByColor(@Body() { colorId }: FindProductByColor) {
-    return this.productService.findProductByColor(colorId)
   }
 
 }

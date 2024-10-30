@@ -1,8 +1,6 @@
-import { IsNumber, IsString, IsDateString, IsArray, IsOptional } from "class-validator";
-import { Color } from "./color-dto";
-import { Memory } from "./memory-dto";
-import { ImagesUrl } from "./images-url-dto";
-import { ScreenTypeDto } from "./screen-type-dto";
+import { Brand, ProductItemColors, ProductItemImages, ProductItemMemory, ScreenType } from "@prisma/client";
+import { IsString, IsArray, IsOptional, IsNumber } from "class-validator";
+import { Product } from "./product-dto";
 
 export class ProductItemInfo {
     @IsNumber()
@@ -15,16 +13,7 @@ export class ProductItemInfo {
     CPU: string;
 
     @IsString()
-    brand: string;
-
-    @IsString()
-    screenType: ScreenTypeDto;
-
-    @IsNumber()
-    productId: number;
-
-    @IsNumber()
-    price: number;
+    cores: number;
 
     @IsString()
     mainCamera: string;
@@ -32,34 +21,48 @@ export class ProductItemInfo {
     @IsString()
     frontCamera: string;
 
-    @IsNumber()
+    @IsString()
     battery: number;
 
     @IsString()
-    description: string;
+    screenTypeId: number;
+
+    @IsString()
+    brandId: number;
+
+    @IsString()
+    productId: number;
+
+    @IsString()
+    price: number;
+
+    @IsString()
+    @IsOptional()
+    description?: string;
 
     @IsString()
     screenResolution: string;
 
-    @IsNumber()
-    cores: number;
-
-    @IsDateString()
+    @IsString()
     createdAt: string;
 
-    @IsDateString()
+    @IsString()
     updatedAt: string;
 
     @IsArray()
-    @IsOptional()
-    colors?: Color[];
+    colors: ProductItemColors[];
 
     @IsArray()
-    @IsOptional()
-    memory?: Memory[];
+    memory: ProductItemMemory[];
 
     @IsArray()
-    @IsOptional()
-    imagesUrl?: ImagesUrl[];
+    brand: Brand;
+
+    @IsArray()
+    imagesUrl: ProductItemImages[];
+
+    product: Product;
+
+    screenType: ScreenType;
 }
 

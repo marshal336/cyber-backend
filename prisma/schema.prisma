@@ -22,17 +22,20 @@ model User {
 }
 
 model Product {
-  id              Int               @id @default(autoincrement())
+  id              Int                 @id @default(autoincrement())
   title           String
-  bestSeller      Int?              @default(0) @map("best_seller")
-  discount        Int?              @default(0)
-  category        Category          @relation(fields: [categoryId], references: [id])
+  bestSeller      Int?                @default(0) @map("best_seller")
   categoryId      Int
-  productItemInfo ProductItemInfo[] @relation(map: "product_item_info")
-  cartItem        CartItem[]        @relation(map: "cart_item")
-  defaultImage    String            @map("default_image")
-  createdAt       DateTime?         @default(now()) @map("created_at")
-  updatedAt       DateTime?         @updatedAt @map("updated_at")
+  colorId         Int                 @map("color_id")
+  discount        Int?                @default(0)
+  colors          ProductItemColors[]
+  memory          ProductItemMemory[]
+  category        Category            @relation(fields: [categoryId], references: [id])
+  productItemInfo ProductItemInfo[]   @relation(map: "product_item_info")
+  cartItem        CartItem[]          @relation(map: "cart_item")
+  defaultImage    String              @map("default_image")
+  createdAt       DateTime?           @default(now()) @map("created_at")
+  updatedAt       DateTime?           @updatedAt @map("updated_at")
 
   @@map("product")
 }
@@ -41,6 +44,10 @@ model ProductItemInfo {
   id               Int                 @id @default(autoincrement())
   screenSize       String?             @map("screen_size")
   CPU              String?             @map("cpu")
+  cores            Int?
+  mainCamera       String?             @map("main_camera")
+  frontCamera      String?             @map("front_camera")
+  battery          Int?
   brand            Brand               @relation(fields: [brandId], references: [id])
   screenType       ScreenType          @relation(fields: [screenTypeId], references: [id], map: "screen_type")
   screenTypeId     Int
@@ -51,12 +58,8 @@ model ProductItemInfo {
   brandId          Int                 @map("brand_id")
   productId        Int                 @map("product_id")
   price            Int
-  mainCamera       String?             @map("main_camera")
-  frontCamera      String?             @map("front_camera")
-  battery          Int?
   description      String?
   screenResolution String?             @map("screen_resolution")
-  cores            Int?
   createdAt        DateTime?           @default(now()) @map("created_at")
   updatedAt        DateTime?           @updatedAt @map("updated_at")
 
@@ -80,6 +83,7 @@ model ProductItemMemory {
   productItemInfo ProductItemInfo[] @relation(map: "product_item_info")
   createdAt       DateTime?         @default(now()) @map("created_at")
   updatedAt       DateTime?         @updatedAt @map("updated_at")
+  product         Product[]
 
   @@map("product_item_memory")
 }
@@ -87,9 +91,11 @@ model ProductItemMemory {
 model ProductItemColors {
   id              Int               @id @default(autoincrement())
   color           String
+  title           String
   productItemInfo ProductItemInfo[] @relation(map: "product_item_info")
   createdAt       DateTime?         @default(now()) @map("created_at")
   updatedAt       DateTime?         @updatedAt @map("updated_at")
+  product         Product[]
 
   @@map("product_item_colors")
 }

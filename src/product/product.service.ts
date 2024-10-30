@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { FindProductBySearchParams } from './dto/product-dto';
+import { FindProductByArgs, FindProductBySearchParams } from './dto/product-dto';
 
 @Injectable()
 export class ProductService {
@@ -17,6 +17,8 @@ export class ProductService {
       include: {
         productItemInfo: true,
         category: true,
+        memory: true,
+        colors: true,
       },
     })
     if (!products) throw new BadRequestException('No product')
@@ -31,6 +33,8 @@ export class ProductService {
       include: {
         productItemInfo: true,
         category: true,
+        memory: true,
+        colors: true,
       },
     })
     if (!products) throw new BadRequestException('No product')
@@ -45,7 +49,9 @@ export class ProductService {
             price: 'asc'
           },
         },
-        category: true
+        category: true,
+        memory: true,
+        colors: true,
       },
     })
     if (!products) throw new BadRequestException('No product')
@@ -62,7 +68,9 @@ export class ProductService {
       },
       include: {
         productItemInfo: true,
-        category: true
+        category: true,
+        colors: true,
+        memory: true
       },
     })
     if (!products) throw new BadRequestException('No product')
@@ -83,7 +91,12 @@ export class ProductService {
         id: 'asc'
       },
       include: {
-        productItemInfo: true,
+        productItemInfo: {
+          include: {
+            colors: true,
+            memory: true
+          }
+        },
         category: true
       },
     })
@@ -91,49 +104,49 @@ export class ProductService {
     return products
   }
 
-  async findProductById(id: number) {
-    const product = await this.prisma.product.findFirst({
-      where: { id },
-      include: {
-        productItemInfo: {
-          include: {
-            brand: true,
-            colors: true,
-            imagesUrl: true,
-            memory: true,
-            screenType: true,
-          },
-        },
-        category: true
-      }
-    })
-    if (!product) throw new BadRequestException('No product')
-    return product
-  }
+  async findProductByArgs({ title, color, memory }: FindProductByArgs) {
 
-  async findProductByColor(colorId: number) {
-    const product = await this.prisma.product.findFirst({
+    const product = await this.prisma.productItemInfo.findFirst({
       where: {
-        productItemInfo: {
+        product: {
+          title: {
+            contains: title,
+            mode: 'insensitive'
+          }
+        },
+        memory: {
           every: {
-            imagesUrl: {
-              every: { id: colorId }
+            title: memory
+          }
+        },
+        colors: {
+          every: {
+            title: {
+              contains: color,
+              mode: 'insensitive'
             }
           }
         }
       },
       include: {
-        productItemInfo: {
+        colors: true,
+        memory: true,
+        brand: true,
+        imagesUrl: true,
+        product: {
           include: {
             colors: true,
             memory: true,
-            imagesUrl: true,
+            category: true
           }
-        }
+        },
+        screenType: true
       }
     })
+
+    const totalPrice = product.price + product.memory[0].price
     if (!product) throw new BadRequestException('No product')
-    return product
+    return { ...product, totalPrice }
   }
 
   async findProductByQuery(data: FindProductBySearchParams,) {
@@ -164,7 +177,12 @@ export class ProductService {
         },
       },
       include: {
-        productItemInfo: true,
+        productItemInfo: {
+          include: {
+            colors: true,
+            memory: true
+          }
+        },
         category: true
       },
     })
