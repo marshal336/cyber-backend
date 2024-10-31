@@ -122,6 +122,9 @@ export class ProductService {
 
   async findProductByArgs({ title, color, memory }: FindProductByArgs) {
 
+    if (!title && !color && !memory) throw new BadRequestException('NOOOOOOOOOOOO')
+    if (!title || !color || !memory) throw new BadRequestException('NOOOOOOOOOOO')
+
     const product = await this.prisma.productItemInfo.findFirst({
       where: {
         product: {
@@ -159,6 +162,7 @@ export class ProductService {
         screenType: true
       }
     })
+    if (!product) throw new BadRequestException('JNOOOOOOOOOOOo')
 
     const totalPrice = product.price + product.memory[0].price
     if (!product) throw new BadRequestException('No product')
@@ -204,10 +208,6 @@ export class ProductService {
         memory: true
       },
     })
-    const count = await this.prisma.product.count({
-      where: { id: { in: product.map(({ id }) => id) } }
-    })
-
     if (!product) throw new BadRequestException('No product by this params')
 
     return product
