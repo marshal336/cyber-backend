@@ -16,17 +16,4 @@ export class AuthController {
     private readonly userService: UserService
   ) { }
 
-  @Post('login')
-  @UseGuards(AuthGuard('local'))
-  @ApiBody({ type: LoginAuthDto })
-  async login(
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
-    @CurrentUser('id') id: string
-  ) {
-    const { accessToken, refreshToken } = await this.authService.createTokens(id)
-    this.userService.addRefreshTokenInCookie(res, refreshToken)
-    return { ...req.user, accessToken }
-  }
-
 }

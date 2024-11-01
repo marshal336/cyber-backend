@@ -30,7 +30,7 @@ export class UserService {
     addRefreshTokenInCookie(res: Response, token: string) {
         res.cookie(this.refreshToken, token, {
             httpOnly: true,
-            sameSite: 'lax',
+            sameSite: 'strict',
             secure: true,
             maxAge: 7 * 60 * 60 * 60
         })
