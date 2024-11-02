@@ -57,6 +57,7 @@ export class UserController {
   @Delete('logout')
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
+  @HttpCode(HttpStatus.OK)
   async logout(
     @Res({ passthrough: true }) res: Response,
     @CurrentUser('id') id: string

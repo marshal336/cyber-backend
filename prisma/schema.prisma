@@ -124,7 +124,7 @@ model Cart {
   id        String     @id @default(cuid())
   total     Int        @default(0)
   userId    String?    @unique
-  user      User?      @relation(fields: [userId], references: [id])
+  user      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
   cartItems CartItem[] @relation(map: "cart_items")
   createdAt DateTime?  @default(now()) @map("created_at")
   updatedAt DateTime?  @updatedAt @map("updated_at")
@@ -135,7 +135,6 @@ model Cart {
 model CartItem {
   id                String          @id @default(cuid())
   quantity          Int
-  total             Int             @default(1)
   productItemInfoId Int             @map("product_item_info_id")
   productItemInfo   ProductItemInfo @relation(fields: [productItemInfoId], references: [id], map: "product_item")
   cart              Cart            @relation(fields: [cartId], references: [id], onDelete: Cascade)
