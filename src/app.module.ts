@@ -5,6 +5,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ProductModule } from './product/product.module';
 import { ConfigModule } from '@nestjs/config';
 import { FiltersModule } from './filters/filters.module';
+import { CartModule } from './cart/cart.module';
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { FiltersModule } from './filters/filters.module';
     PrismaModule,
     ProductModule,
     ConfigModule.forRoot({ isGlobal: true }),
-    FiltersModule
+    FiltersModule,
+    CartModule
   ],
 })
 export class AppModule { }

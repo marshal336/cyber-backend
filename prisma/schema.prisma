@@ -32,7 +32,6 @@ model Product {
   memory          ProductItemMemory[]
   category        Category            @relation(fields: [categoryId], references: [id])
   productItemInfo ProductItemInfo[]   @relation(map: "product_item_info")
-  cartItem        CartItem[]          @relation(map: "cart_item")
   defaultImage    String              @map("default_image")
   createdAt       DateTime?           @default(now()) @map("created_at")
   updatedAt       DateTime?           @updatedAt @map("updated_at")
@@ -48,13 +47,14 @@ model ProductItemInfo {
   mainCamera       String?             @map("main_camera")
   frontCamera      String?             @map("front_camera")
   battery          Int?
-  brand            Brand               @relation(fields: [brandId], references: [id])
-  screenType       ScreenType          @relation(fields: [screenTypeId], references: [id], map: "screen_type")
   screenTypeId     Int
+  screenType       ScreenType          @relation(fields: [screenTypeId], references: [id], map: "screen_type")
+  brand            Brand               @relation(fields: [brandId], references: [id])
   product          Product             @relation(fields: [productId], references: [id])
   colors           ProductItemColors[]
   memory           ProductItemMemory[]
   imagesUrl        ProductItemImages[]
+  cartItem         CartItem[]          @relation(map: "cart_item")
   brandId          Int                 @map("brand_id")
   productId        Int                 @map("product_id")
   price            Int
@@ -81,9 +81,9 @@ model ProductItemMemory {
   title           String
   price           Int
   productItemInfo ProductItemInfo[] @relation(map: "product_item_info")
+  product         Product[]
   createdAt       DateTime?         @default(now()) @map("created_at")
   updatedAt       DateTime?         @updatedAt @map("updated_at")
-  product         Product[]
 
   @@map("product_item_memory")
 }
@@ -91,11 +91,11 @@ model ProductItemMemory {
 model ProductItemColors {
   id              Int               @id @default(autoincrement())
   color           String
-  title           String
   productItemInfo ProductItemInfo[] @relation(map: "product_item_info")
+  product         Product[]
+  title           String
   createdAt       DateTime?         @default(now()) @map("created_at")
   updatedAt       DateTime?         @updatedAt @map("updated_at")
-  product         Product[]
 
   @@map("product_item_colors")
 }
@@ -120,28 +120,30 @@ model ProductItemImages {
   @@map("product_item_images")
 }
 
-model CartItem {
-  id            String    @id @default(cuid())
-  productItem   Product   @relation(fields: [productItemId], references: [id], map: "product_item")
-  productItemId Int       @map("product_item_images")
-  cart          Cart      @relation(fields: [cartId], references: [id])
-  cartId        String
-  createdAt     DateTime? @default(now()) @map("created_at")
-  updatedAt     DateTime? @updatedAt @map("updated_at")
-
-  @@map("cart_item")
-}
-
 model Cart {
   id        String     @id @default(cuid())
   total     Int        @default(0)
-  user      User       @relation(fields: [userId], references: [id])
-  userId    String     @unique
+  userId    String?    @unique
+  user      User?      @relation(fields: [userId], references: [id])
   cartItems CartItem[] @relation(map: "cart_items")
   createdAt DateTime?  @default(now()) @map("created_at")
   updatedAt DateTime?  @updatedAt @map("updated_at")
 
   @@map("cart")
+}
+
+model CartItem {
+  id                String          @id @default(cuid())
+  quantity          Int
+  total             Int             @default(1)
+  productItemInfoId Int             @map("product_item_info_id")
+  productItemInfo   ProductItemInfo @relation(fields: [productItemInfoId], references: [id], map: "product_item")
+  cart              Cart            @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  cartId            String
+  createdAt         DateTime?       @default(now()) @map("created_at")
+  updatedAt         DateTime?       @updatedAt @map("updated_at")
+
+  @@map("cart_item")
 }
 
 model ScreenType {
