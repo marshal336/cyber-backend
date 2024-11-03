@@ -815,7 +815,7 @@ export const dataProduct: Omit<Prisma.ProductItemInfoUncheckedCreateInput, 'pric
         screenSize: '6',
         screenTypeId: 1,
         description: 'Enhanced capabilities thanks toan enlarged display of 6.7 inchesand work without rechargingthroughout the day. Incredible photosas in weak, yesand in bright lightusing the new systemwith two cameras more...',
-        brandId: 1
+        brandId: 2
     },
     {
         productId: 15,
@@ -831,7 +831,7 @@ export const dataProduct: Omit<Prisma.ProductItemInfoUncheckedCreateInput, 'pric
         screenSize: '6',
         screenTypeId: 1,
         description: 'Enhanced capabilities thanks toan enlarged display of 6.7 inchesand work without rechargingthroughout the day. Incredible photosas in weak, yesand in bright lightusing the new systemwith two cameras more...',
-        brandId: 1
+        brandId: 2
     },
     /** Samsung Galaxy S24 Ultra Black  */
 
@@ -867,7 +867,7 @@ export const dataProduct: Omit<Prisma.ProductItemInfoUncheckedCreateInput, 'pric
         screenSize: '6',
         screenTypeId: 1,
         description: 'Enhanced capabilities thanks toan enlarged display of 6.7 inchesand work without rechargingthroughout the day. Incredible photosas in weak, yesand in bright lightusing the new systemwith two cameras more...',
-        brandId: 1
+        brandId: 2
     },
     {
         productId: 16,
@@ -883,7 +883,7 @@ export const dataProduct: Omit<Prisma.ProductItemInfoUncheckedCreateInput, 'pric
         screenSize: '6',
         screenTypeId: 1,
         description: 'Enhanced capabilities thanks toan enlarged display of 6.7 inchesand work without rechargingthroughout the day. Incredible photosas in weak, yesand in bright lightusing the new systemwith two cameras more...',
-        brandId: 1
+        brandId: 2
     },
     /** Samsung Galaxy S24 Ultra Gold */
 
