@@ -21,6 +21,7 @@ export class UserService {
     async logout(id: string) {
         if (!id) throw new BadRequestException('Whats wents wrong')
         else await this.prisma.user.delete({ where: { id } })
+        return true
     }
     async findById(id: string) {
         if (!id) throw new BadRequestException('No userId')

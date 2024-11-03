@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateAuthDto } from './dto/user';
@@ -11,6 +11,16 @@ export class AuthService {
     private readonly jwt: JwtService
   ) { }
 
+
+  async getNewToken(refreshToken: string) {
+    const res = await this.jwt.verifyAsync(refreshToken)
+    if (!res) throw new UnauthorizedException('Token must be provided')
+    const { password, ...user } = await this.prisma.user.findFirst({
+      where: { id: res.userId }
+    })
+    const tokens = await this.createTokens(user.id)
+    return { ...user, ...tokens }
+  }
 
   async createTokens(userId: string) {
     const accessToken = await this.jwt.signAsync({ userId }, {
@@ -36,7 +46,11 @@ export class AuthService {
         }
       })
       const tokens = await this.createTokens(user.id)
-
+      await this.prisma.cart.create({
+        data: {
+          userId: user.id
+        }
+      })
       if (!user || !tokens) throw new BadRequestException('Whats went wrong!')
       return { ...user, ...tokens }
     }

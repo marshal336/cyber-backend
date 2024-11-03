@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, HttpCode, ValidationPipe, UsePipes, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Delete, Res, HttpStatus, HttpCode, ValidationPipe, UsePipes, Req, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateAuthDto, LoginAuthDto } from 'src/auth/dto/user';
 import { Request, Response } from 'express';
@@ -6,6 +6,7 @@ import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { CurrentUser } from 'src/auth/decorators/user.decorator';
 import { AuthService } from 'src/auth/auth.service';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
 @Controller('user')
 @ApiTags('user')
@@ -42,8 +43,9 @@ export class UserController {
     return { ...req.user, accessToken }
   }
 
+
   @Get('profile')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   @ApiBearerAuth()
   async profile(
@@ -62,8 +64,9 @@ export class UserController {
     @Res({ passthrough: true }) res: Response,
     @CurrentUser('id') id: string
   ) {
-    await this.userService.logout(id)
+    const message = await this.userService.logout(id)
     this.userService.removeRefreshTokenInCookie(res)
+    return message
   }
 
 }

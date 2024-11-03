@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, UsePipes, UseGuards, Req, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, UsePipes, UseGuards, Req, Res, HttpCode, HttpStatus, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
@@ -15,5 +15,21 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly userService: UserService
   ) { }
+
+  @Post('login/access-token')
+  @HttpCode(HttpStatus.OK)
+  async getNewTokens(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const refreshTokenInCookie = req.cookies[this.userService.refreshToken]
+    if (!refreshTokenInCookie) {
+      this.userService.removeRefreshTokenInCookie(res)
+      throw new UnauthorizedException('Refresh token no passed')
+    }
+    const { refreshToken, ...user } = await this.authService.getNewToken(refreshTokenInCookie)
+    this.userService.addRefreshTokenInCookie(res, refreshToken)
+    return user
+  }
 
 }

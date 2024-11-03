@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, HttpStatus, HttpCode, Put } from '@nestjs/common';
 import { CartService } from './cart.service';
-import { CreateCartDto, RemoveCartDto } from './dto/cart.dto';
+import { CreateCartDto, PlusOrMinus, RemoveCartDto } from './dto/cart.dto';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { CurrentUser } from 'src/auth/decorators/user.decorator';
@@ -14,6 +14,14 @@ export class CartController {
   constructor(private readonly cartService: CartService) { }
 
 
+  @Get('')
+  @HttpCode(HttpStatus.OK)
+  getCart(
+    @CurrentUser('id') userId: string
+  ) {
+    return this.cartService.getCart(userId)
+  }
+
   @Post('')
   @ApiBody({ type: CreateCartDto })
   @HttpCode(HttpStatus.OK)
@@ -25,7 +33,7 @@ export class CartController {
   }
 
   @Put('minus|plus')
-  @ApiBody({ type: CreateCartDto })
+  @ApiBody({ type: PlusOrMinus })
   @HttpCode(HttpStatus.OK)
   plusOrMinus(
     @Body() data: CreateCartDto,
