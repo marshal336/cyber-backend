@@ -56,9 +56,13 @@ export class CartService {
                                 memory: true
                             }
                         }
+                    },
+                    orderBy:{
+                        createdAt: 'desc'
                     }
-                }
-            }
+                },
+
+            },
         })
     }
     async createCart(data: CreateCartDto) {

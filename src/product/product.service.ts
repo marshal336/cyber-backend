@@ -178,7 +178,7 @@ export class ProductService {
 
     const product = await this.prisma.product.findMany({
       skip: (+data.page - 1) * 8,
-      take: 8,
+      take: 8,  
       where: {
         productItemInfo: {
           every: {
@@ -188,9 +188,13 @@ export class ProductService {
             screenType: {
               id: { in: screenTypeId }
             },
-            memory: {
-              some: {
-                id: { in: memoryId }
+            product: {
+              memory: {
+                some: {
+                  id: {
+                    in: memoryId
+                  }
+                }
               }
             }
           }

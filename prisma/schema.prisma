@@ -9,14 +9,19 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(cuid())
-  fullName  String?   @map("full_name")
-  email     String    @unique
-  password  String
-  cart      Cart?
-  role      Role      @default(USER)
-  createdAt DateTime? @default(now()) @map("created_at")
-  updatedAt DateTime? @updatedAt @map("updated_at")
+  id          String        @id @default(cuid())
+  fullName    String?       @map("full_name")
+  email       String        @unique
+  password    String
+  city        String?
+  country     String?
+  pictures    String?
+  phoneNumber String?       @map("phone_number")
+  cart        Cart?
+  role        Role          @default(USER)
+  createdAt   DateTime?     @default(now()) @map("created_at")
+  updatedAt   DateTime?     @updatedAt @map("updated_at")
+  transaction Transaction[]
 
   @@map("user")
 }
@@ -145,12 +150,45 @@ model CartItem {
   @@map("cart_item")
 }
 
+model Transaction {
+  id               String          @id @default(cuid())
+  user             User            @relation(fields: [userId], references: [id])
+  shipmentMethod   ShipmentMethod? @relation(fields: [shipmentMethodId], references: [id])
+  shipmentMethodId Int?
+  city             String?
+  country          String?
+  street           String?
+  status           Status
+  phoneNumber      String?         @map("phone_number")
+  userId           String
+  paymentId        String?         @map("payment_id")
+  updatedAt        DateTime?       @updatedAt @map("updated_at")
+  createdAt        DateTime?       @default(now()) @map("created_at")
+}
+
+model ShipmentMethod {
+  id          Int           @id @default(autoincrement())
+  title       String
+  transaction Transaction[]
+  description String
+  createdAt   DateTime?     @default(now()) @map("created_at")
+  updatedAt   DateTime?     @updatedAt @map("updated_at")
+
+  @@map("shipment_method")
+}
+
 model ScreenType {
   id              Int               @id @default(autoincrement())
   title           String
   productItemInfo ProductItemInfo[]
   createdAt       DateTime?         @default(now()) @map("created_at")
   updatedAt       DateTime?         @updatedAt @map("updated_at")
+}
+
+enum Status {
+  PENDING
+  SUCCESS
+  ERROR
 }
 
 enum Role {

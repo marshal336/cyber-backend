@@ -9,15 +9,24 @@ export class FiltersService {
 
   async getFilters() {
     const filters = await this.prisma.$transaction(async () => {
-      const brands = await this.prisma.brand.findMany()
-      const screenType = await this.prisma.screenType.findMany()
+      const brands = await this.prisma.brand.findMany({
+        include: {
+          productItemInfo: true
+        }
+      })
+      const screenType = await this.prisma.screenType.findMany({
+        include: {
+          productItemInfo: true
+        }
+      })
       const memorys = await this.prisma.productItemMemory.findMany({
         select: {
           id: true,
           title: true,
           createdAt: true,
-          updatedAt: true
-        }
+          updatedAt: true,
+          productItemInfo: true
+        },
       })
       return {
         brands,

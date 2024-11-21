@@ -13,7 +13,7 @@ import { UserService } from 'src/user/user.service';
     PrismaModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
+      useFactory: async (configService: ConfigService) => ({
         secret: configService.get('JWT_SECRET'),
       }),
       inject: [ConfigService]
