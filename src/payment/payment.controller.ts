@@ -21,7 +21,6 @@ import { CurrentUser } from 'src/auth/decorators/user.decorator';
 @ApiTags('Payment')
 @ApiBearerAuth()
 @UsePipes(new ValidationPipe())
-@UseGuards(JwtAuthGuard)
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
 
@@ -30,18 +29,19 @@ export class PaymentController {
   async getShipping() {
     return this.paymentService.shipmentMethod();
   }
+  @UseGuards(JwtAuthGuard)
   @Post('transaction/info')
   @HttpCode(HttpStatus.OK)
   async getTransaction(@Body('transactionId') transactionId: string) {
     return this.paymentService.transactionById(transactionId);
   }
-
+  @UseGuards(JwtAuthGuard)
   @Post('transaction/create')
   @HttpCode(HttpStatus.OK)
   async create(@CurrentUser('id') id: string) {
     return this.paymentService.promocode(id);
   }
-
+  @UseGuards(JwtAuthGuard)
   @Put('transaction/update')
   @HttpCode(HttpStatus.OK)
   @ApiBody({ type: Steps })
@@ -59,9 +59,14 @@ export class PaymentController {
     return this.paymentService.remove(id, transactionId);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('transaction/finish')
   @HttpCode(HttpStatus.OK)
-  async finish(@CurrentUser('id') id: string) {
-    return this.paymentService.finishTransaction(id);
+  @ApiBody({ type: String })
+  async finish(
+    @Body('transactionId') transactionId: string,
+    @CurrentUser('id') id: string,
+  ) {
+    return this.paymentService.finishTransaction(transactionId, id);
   }
 }
