@@ -18,7 +18,7 @@ export class PaymentService {
       const transaction = await this.prisma.transaction.create({
         data: {
           userId,
-          status: 'PENDING',
+          status: 'PENDING'
         },
       });
       if (!transaction) throw new BadRequestException('no transaction');
