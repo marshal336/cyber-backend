@@ -13,13 +13,13 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateAuthDto, LoginAuthDto } from '../auth/dto/user';
+import { CreateAuthDto, LoginAuthDto } from 'src/auth/dto/user';
 import { Request, Response } from 'express';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
-import { CurrentUser } from '../auth/decorators/user.decorator';
-import { AuthService } from '../auth/auth.service';
-import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { CurrentUser } from 'src/auth/decorators/user.decorator';
+import { AuthService } from 'src/auth/auth.service';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { IProfileChange } from './dto/create-user.dto';
 
 @Controller('user')
