@@ -1,29 +1,29 @@
 {
-    "version": 2,
-    "env": {
-      "PORT": "5500",
-      "JWT_SECRET": "sadfjkhghjshag",
-      "DATABASE_URL": "postgresql://postgres:gcVCWBYjuhrijgJLsCGEQnhFoGnQtOoZ@autorack.proxy.rlwy.net:57624/railway",
-      "ORIGIN": "https://cyber-frontend-seven.vercel.app",
-      "IP_INFO_SECRET": "0dab4b79187b2c"
-    },
-    "builds": [
-      {
-        "src": "src/main.ts",
-        "use": "@vercel/node"
-      }
-    ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "src/main.ts",
-        "methods": [
-          "GET",
-          "POST",
-          "PUT",
-          "DELETE"
-        ]
-      }
-    ]
+  "version": 2,
+  "builds": [
+    {
+      "src": "src/main.ts",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "src/main.ts",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ]
+    }
+  ],
+  "env": {
+    "STRIPE_SECRET_KEY": "sk_test_51QJrlZ02cjN72lmuu7MvXGaUweicBUOLGHzyW58TGXxbLtuqmrGRqFPPGUfL7LhP4SvLNmpR8jUrPYxRoovUVIRG00OMBoaJgZ",
+    "PORT": "5500",
+    "ORIGIN": "https://cyber-frontend-seven.vercel.app",
+    "JWT_SECRET": "12wadscAAAAAEDQWweas    qwasredqsDRF    QEfswedaRFQE",
+    "DATABASE_URL": "postgresql://postgres:gcVCWBYjuhrijgJLsCGEQnhFoGnQtOoZ@autorack.proxy.rlwy.net:57624/railway",
+    "IP_INFO_SECRET": "0dab4b79187b2c"
   }
-  
+}
