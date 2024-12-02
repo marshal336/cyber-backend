@@ -3,7 +3,7 @@ import { hashSync } from 'bcrypt';
 import {
   createProductItemInfo as ProductInfo,
   randomPrice,
-} from 'src/src/utils';
+} from '../src/utils';
 import { dataProduct } from './data';
 
 const prisma = new PrismaClient();

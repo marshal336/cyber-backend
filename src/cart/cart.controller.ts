@@ -3,7 +3,7 @@ import { CartService } from './cart.service';
 import { CreateCartDto, PlusOrMinus, RemoveCartDto } from './dto/cart.dto';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
-import { CurrentUser } from 'src/auth/decorators/user.decorator';
+import { CurrentUser } from '../auth/decorators/user.decorator';
 
 
 @Controller('cart')
