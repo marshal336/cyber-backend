@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { AuthService } from 'src/auth/auth.service';
-import { CreateAuthDto } from 'src/auth/dto/user';
+import { AuthService } from '../auth/auth.service';
+import { CreateAuthDto } from '../auth/dto/user';
 import { Response } from 'express';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { IProfileChange } from './dto/create-user.dto';
 
 @Injectable()
@@ -10,7 +10,7 @@ export class UserService {
   constructor(
     private readonly authService: AuthService,
     private readonly prisma: PrismaService,
-  ) {}
+  ) { }
 
   refreshToken = 'refreshToken';
   async changeProfile(id: string, data: IProfileChange) {

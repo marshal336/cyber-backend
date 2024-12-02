@@ -13,16 +13,16 @@ import {
 } from '@nestjs/common';
 import { PaymentService } from './payment.service';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { Steps } from './payment.dto';
-import { CurrentUser } from 'src/auth/decorators/user.decorator';
+import { CurrentUser } from '../auth/decorators/user.decorator';
 
 @Controller('payment')
 @ApiTags('Payment')
 @ApiBearerAuth()
 @UsePipes(new ValidationPipe())
 export class PaymentController {
-  constructor(private readonly paymentService: PaymentService) {}
+  constructor(private readonly paymentService: PaymentService) { }
 
   @Get('shipping')
   @HttpCode(HttpStatus.OK)

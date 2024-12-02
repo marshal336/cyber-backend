@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { FindProductByArgs, FindProductBySearchParams } from './dto/product-dto';
 
 @Injectable()
@@ -178,7 +178,7 @@ export class ProductService {
 
     const product = await this.prisma.product.findMany({
       skip: (+data.page - 1) * 8,
-      take: 8,  
+      take: 8,
       where: {
         productItemInfo: {
           every: {

@@ -14,7 +14,7 @@ import {
 import { AuthService } from './auth.service';
 import { ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../user/user.service';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -23,7 +23,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UserService,
-  ) {}
+  ) { }
 
   @Post('login/access-token')
   @HttpCode(HttpStatus.OK)
@@ -33,7 +33,7 @@ export class AuthController {
   ) {
     const refreshTokenInCookie = req.cookies[this.userService.refreshToken];
     console.log(refreshTokenInCookie);
-    
+
     if (!refreshTokenInCookie) {
       this.userService.removeRefreshTokenInCookie(res);
       throw new UnauthorizedException('You are not Login');
