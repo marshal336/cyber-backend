@@ -7,7 +7,6 @@ import { ConfigModule } from '@nestjs/config';
 import { FiltersModule } from './filters/filters.module';
 import { CartModule } from './cart/cart.module';
 import { PaymentModule } from './payment/payment.module';
-import { AppController } from './app.controller';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 
@@ -26,6 +25,5 @@ import { join } from 'path';
     CartModule,
     PaymentModule,
   ],
-  controllers: [AppController]
 })
 export class AppModule { }
