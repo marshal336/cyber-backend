@@ -1,4 +1,4 @@
-import * as cookieParser from 'cookie-parser';
+// import * as cookieParser from 'cookie-parser';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -9,7 +9,7 @@ async function bootstrap() {
 
   app.disable('x-powered-by');
   app.setGlobalPrefix('api');
-  app.use(cookieParser());
+  // app.use(cookieParser());
 
   app.enableCors({
     credentials: true,
