@@ -7,15 +7,9 @@ import { ConfigModule } from '@nestjs/config';
 import { FiltersModule } from './filters/filters.module';
 import { CartModule } from './cart/cart.module';
 import { PaymentModule } from './payment/payment.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
 
 @Module({
   imports: [
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, 'dist', 'src'),
-      exclude: ['api/*']
-    }),
     UserModule,
     AuthModule,
     PrismaModule,
