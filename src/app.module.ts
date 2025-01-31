@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { FiltersModule } from './filters/filters.module';
 import { CartModule } from './cart/cart.module';
 import { PaymentModule } from './payment/payment.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -19,5 +20,6 @@ import { PaymentModule } from './payment/payment.module';
     CartModule,
     PaymentModule,
   ],
+  controllers: [AppController]
 })
 export class AppModule { }
