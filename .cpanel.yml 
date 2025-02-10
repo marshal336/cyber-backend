@@ -1,0 +1,8 @@
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/example/nest_app/
+    - npm install
+    - npm run build
+    - cp -r dist package.json node_modules $DEPLOYPATH
+    - cd $DEPLOYPATH && npm install --omit=dev
+    - pm2 restart nest-app || pm2 start dist/main.js --name "nest-app"
