@@ -1,6 +1,7 @@
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["prismaSchemaFolder"]
+  provider                       = "prisma-client-js"
+  previewFeatures                = ["prismaSchemaFolder"]
+  interactiveTransactionsTimeout = 10000
 }
 
 datasource db {

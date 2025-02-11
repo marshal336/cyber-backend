@@ -31,9 +31,7 @@ export class AuthController {
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const refreshTokenInCookie = req.cookies[this.userService.refreshToken];
-    console.log(refreshTokenInCookie);
-
+    const refreshTokenInCookie = req.cookies[this.userService.refreshToken]
     if (!refreshTokenInCookie) {
       this.userService.removeRefreshTokenInCookie(res);
       throw new UnauthorizedException('You are not Login');

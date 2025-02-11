@@ -3,13 +3,15 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import * as cookieParser from 'cookie-parser';
+
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.disable('x-powered-by');
   app.setGlobalPrefix('api');
-  // app.use(cookieParser());
+  app.use(cookieParser());
 
   app.enableCors({
     credentials: true,
